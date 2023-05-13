@@ -30,11 +30,11 @@ public class CalcStrategy implements NodeStrategy<Integer> {
             if ("+".equals(node.getValue())) {
                 result = num1 + num2;
             } else if ("-".equals(node.getValue())) {
-                result = num1 - num2;
+                result = num2 - num1;
             } else if ("*".equals(node.getValue())) {
                 result = num1 * num2;
             } else if ("/".equals(node.getValue())) {
-                result = num1 / num2;
+                result = num2 / num1;
             }
 
             //resultをスタックにプッシュ

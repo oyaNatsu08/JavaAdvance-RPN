@@ -66,29 +66,29 @@ public class MathExpParserTest {
         assertEquals("1 2 * 3 4 * +", strategy.getResult());
     }
 
-//	/* ここからは応用課題 */
-//	@Test
-//	public void testMathExpParser7() {
-//		mep = new MathExpParser("1*(2+3)*4");
-//		TreeTraverse.postOrder(mep.parse(), strategy);
-//
-//		assertEquals("1 2 3 + * 4 *", strategy.getResult());
-//	}
-//
-//	@Test
-//	public void testMathExpParser8() {
-//		mep = new MathExpParser("1*((2+3)*4)");
-//		TreeTraverse.postOrder(mep.parse(), strategy);
-//
-//		assertEquals("1 2 3 + 4 * *", strategy.getResult());
-//	}
-//
-//	@Test
-//	public void testMathExpParser9() {
-//		mep = new MathExpParser("10+20+30");
-//		TreeTraverse.postOrder(mep.parse(), strategy);
-//
-//		assertEquals("10 20 + 30 +", strategy.getResult());
-//	}
+	/* ここからは応用課題 */
+	@Test
+	public void testMathExpParser7() {
+		mep = new MathExpParser("1*(2+3)*4");
+		TreeTraverse.postOrder(mep.parse(), strategy);
+
+		assertEquals("1 2 3 + * 4 *", strategy.getResult());
+	}
+
+	@Test
+	public void testMathExpParser8() {
+		mep = new MathExpParser("1*((2+3)*4)");
+		TreeTraverse.postOrder(mep.parse(), strategy);
+
+		assertEquals("1 2 3 + 4 * *", strategy.getResult());
+	}
+
+	@Test
+	public void testMathExpParser9() {
+		mep = new MathExpParser("10+20+30");
+		TreeTraverse.postOrder(mep.parse(), strategy);
+
+		assertEquals("10 20 + 30 +", strategy.getResult());
+	}
 
 }

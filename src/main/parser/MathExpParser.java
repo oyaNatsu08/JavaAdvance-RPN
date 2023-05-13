@@ -22,6 +22,9 @@ public class MathExpParser {
     /** 中置記法の数式 */
     private String expr;
 
+    //2桁以上を扱うフラッグ
+    boolean judge = false;
+
     /**
      * パース対象の数式を保持したインスタンスを生成します。
      *
@@ -60,9 +63,18 @@ public class MathExpParser {
             //もし文字が数字なら
             if (Character.isDigit(c)) {
 
-                listNode.add(new IntegerNode(Integer.parseInt(c.toString())));
+                //2桁以上を扱う
+                if (judge) {
+                    String tmp = listNode.get(listNode.size() - 1).toString();
+                    tmp += c.toString();
+                    listNode.set(listNode.size() - 1, new IntegerNode(Integer.parseInt(tmp)));
+                } else {
+                    listNode.add(new IntegerNode(Integer.parseInt(c.toString())));
+                    judge = true;
+                }
 
             } else if (c == '+' || c == '-') {      //演算子が + or - の時はどの演算子が来た場合でも優先順位で勝ることはないので、プッシュでスタックに保持
+                judge = false;
 
                 //スタックの中に何かあり、かつ、スタックの中身が演算子なら、スタックの中身をポップして、リストに追加
                 while (!stack.isEmpty() && (stack.peek() == '+' || stack.peek() == '-' || stack.peek() == '*' || stack.peek() == '/')) {
@@ -74,6 +86,8 @@ public class MathExpParser {
 
             } else if (c == '*' || c == '/') {      //演算子が * or / の場合は、スタックの中身が + や - の演算子はそのままスタックにプッシュ
 
+                judge = false;
+
                 while (!stack.isEmpty() && (stack.peek() == '*' || stack.peek() == '/')) {
 
                     listNode.add(new OpNode(stack.pop().toString()));
@@ -81,6 +95,15 @@ public class MathExpParser {
                 }
                 stack.push(c);
 
+            } else if (c == '(') {
+                stack.push(c);
+            } else if (c == ')') {
+                while (!stack.isEmpty() && stack.peek() != '(') {
+                    listNode.add(new OpNode(stack.pop().toString()));
+                }
+                if (!stack.isEmpty() && stack.peek() == '(') {
+                    stack.pop();
+                }
             }
 
         }
@@ -93,7 +116,7 @@ public class MathExpParser {
         //System.out.println(listNode);
         int count = 0;
         while (listNode.size() > 1) {
-            if (!listNode.get(count).toString().matches("[0-9]")) {
+            if (!listNode.get(count).toString().matches("[0-9]+")) {
                 //System.out.println(listNode.get(count) + " " + listNode.get(count-2) + " " + listNode.get(count-1));
                 listNode.get(count).setLeft(listNode.get(count - 2));
                 listNode.get(count).setRight(listNode.get(count - 1));
@@ -110,7 +133,7 @@ public class MathExpParser {
 
         ToStringStrategy toStringStrategy = new ToStringStrategy();
         TreeTraverse.postOrder(listNode.get(0), toStringStrategy);
-        System.out.println(toStringStrategy.getResult());
+        //System.out.println(toStringStrategy.getResult());
 
         return listNode.get(0);
 
